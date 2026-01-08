@@ -27,8 +27,3 @@ jobs:
           pip install --upgrade hatch
           hatch --version # Verify that Hatch is installed
       - name: Build artifacts
-        with:
-          path: dist/
-          name: dist.zip
-          if-no-files-found: error
-          retention-days: 1
