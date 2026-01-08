@@ -1,0 +1,34 @@
+name: Release
+
+on:
+  release:
+    types:
+      - published
+
+permissions: {} # no permissions to the token at global level
+
+jobs:
+  build_package:
+    name: Build the package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # this job only needs read access
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+      - name: Setup Python
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: "3.12" # Select the version that you want to build your package on
+      - name: Upgrade pip, install Hatch, and check Hatch version
+        run: |
+          pip install --upgrade pip
+          pip install --upgrade hatch
+          hatch --version # Verify that Hatch is installed
+      - name: Build artifacts
+        with:
+          path: dist/
+          name: dist.zip
+          if-no-files-found: error
+          retention-days: 1
